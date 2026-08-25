@@ -63,13 +63,10 @@ module mbist (
     end
 
     
-    wire write_en = (state == S_M0 & step == 2'd0) |
-                    (state == S_M1 & step == 2'd1) |
-                    (state == S_M2 & step == 2'd1);
+    wire write_en = (state == S_M0) |
+                    ((state == S_M1 | state == S_M2) & step == 2'd1);
 
-    wire read_en  = (state == S_M1 & (step == 2'd0 | step == 2'd2)) |
-                    (state == S_M2 & (step == 2'd0 | step == 2'd2));
-
+    wire read_en  = (state == S_M1 | state == S_M2) & (step == 2'd0 | step == 2'd2);
     
     assign mem_ce   = write_en | read_en;
     assign mem_we   = write_en;
