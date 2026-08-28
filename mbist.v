@@ -133,7 +133,7 @@ module mbist #(
 
     assign fail           = fail_reg;
     assign fail_addr      = fail_addr_reg;
-    assign fail_addr_mask = fail_data_mask_reg;
+    assign fail_data_mask = fail_data_mask_reg;
 //-----------------------------------------------------------------------//
 
     assign done = (state == S_DONE);
