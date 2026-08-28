@@ -123,7 +123,7 @@ module mbist #(
         if (rst) begin
             fail_reg           <= 1'b0;
             fail_addr_reg      <= {ADDR_W{1'b0}};
-            fail_addr_mask_reg <= {ADDR_W{1'b0}};
+            fail_addr_mask_reg <= {DATA_W{1'b0}};
         end else begin
             fail_reg           <= check_failed;
             fail_addr_reg      <= check_failed   ? check_addr : fail_addr_reg;
