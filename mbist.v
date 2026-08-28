@@ -79,9 +79,9 @@ module mbist #(
 //--------------------------------------------------------------//
 
 //---------------------------- OUTPUT INTO MEMORY -------------------//    
-    assign mem_ce   =  (state == S_M0 | 
-                        state == S_M1 | 
-                        state == S_M2);
+    assign mem_ce   =  (state == S_M0) | 
+                       (state == S_M1) | 
+                       (state == S_M2);
 
     assign mem_we   =  (state == S_M1 | state == S_M2) & step == 2'd1 |
                                        (state == S_M0) & step == 2'd0 ;
@@ -95,7 +95,9 @@ module mbist #(
     reg check_en;
     reg [ADDR_W-1:0] check_addr;
     reg [DATA_W-1:0] expected_data;
-    wire exp_bit = (state == S_M1 & step == 2'd2 || state == S_M2 & step == 2'd0);
+
+    wire exp_bit = (state == S_M1 & step == 2'd2) |
+                   (state == S_M2 & step == 2'd0);
 
     always @(posedge clk) begin
         if (rst) begin
@@ -136,11 +138,11 @@ module mbist #(
     assign fail_data_mask = fail_data_mask_reg;
 //-----------------------------------------------------------------------//
 
-//------------------------ EXIT LOGIC ----------------------------//
+//---------------------------- EXIT LOGIC ------------------------------//
     reg done_reg;
     
     always @(posedge clk) begin 
-        if(rst) begin
+        if (rst) begin
             done_reg <= 0;
         end else begin 
             done_reg <= (state == S_DONE);
@@ -148,6 +150,6 @@ module mbist #(
     end
 
     assign done = done_reg;
-//---------------------------------------------------------------//
+//----------------------------------------------------------------------//
 
 endmodule
