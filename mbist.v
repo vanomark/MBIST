@@ -51,9 +51,9 @@ module mbist #(
     reg [1:0] step;
     reg [ADDR_W-1:0] addr;
 
-    wire [1:0] max_step = (state == S_M0) ? 2'd1 :
+    wire [1:0] max_step = (state == S_M0)                  ? 2'd1 :
                           (state == S_M1 || state == S_M2) ? 2'd2 : 
-                          2'd0;
+                                                             2'd0;
 
     wire step_done = (step == max_step);
     
@@ -115,7 +115,7 @@ module mbist #(
 
 
 //------------------------ HANDLE ERROR ----------------------------------//
-    reg fail_reg;
+    reg              fail_reg;
     reg [ADDR_W-1:0] fail_addr_reg;
     reg [DATA_W-1:0] fail_data_mask_reg;
 
@@ -136,6 +136,18 @@ module mbist #(
     assign fail_data_mask = fail_data_mask_reg;
 //-----------------------------------------------------------------------//
 
-    assign done = (state == S_DONE);
+//------------------------ EXIT LOGIC ----------------------------//
+    reg done_reg;
+    
+    always @(posedge clk) begin 
+        if(rst) begin
+            done_reg <= 0;
+        end else begin 
+            done_reg <= (state == S_DONE);
+        end
+    end
+
+    assign done = done_reg;
+//---------------------------------------------------------------//
 
 endmodule
