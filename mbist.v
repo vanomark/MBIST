@@ -11,7 +11,7 @@ module mbist #(
     output wire               done,
     output wire               fail,
     output wire [ADDR_W-1:0]  fail_addr,
-    output wire [DATA_W-1:0]  fail_addr_mask,
+    output wire [DATA_W-1:0]  fail_data_mask,
 //=============================================//
 
 //========== CONNECTION WITH MEMORY ===========//
@@ -117,23 +117,23 @@ module mbist #(
 //------------------------ HANDLE ERROR ----------------------------------//
     reg fail_reg;
     reg [ADDR_W-1:0] fail_addr_reg;
-    reg [DATA_W-1:0] fail_addr_mask_reg;
+    reg [DATA_W-1:0] fail_data_mask_reg;
 
     always @(posedge clk) begin
         if (rst) begin
             fail_reg           <= 1'b0;
             fail_addr_reg      <= {ADDR_W{1'b0}};
-            fail_addr_mask_reg <= {DATA_W{1'b0}};
+            fail_data_mask_reg <= {DATA_W{1'b0}};
         end else begin
             fail_reg           <= check_failed;
             fail_addr_reg      <= check_failed   ? check_addr : fail_addr_reg;
-            fail_addr_mask_reg <= check_failed   ? check_mask : fail_addr_mask_reg;
+            fail_data_mask_reg <= check_failed   ? check_mask : fail_data_mask_reg;
         end
     end
 
     assign fail           = fail_reg;
     assign fail_addr      = fail_addr_reg;
-    assign fail_addr_mask = fail_addr_mask_reg;
+    assign fail_addr_mask = fail_data_mask_reg;
 //-----------------------------------------------------------------------//
 
     assign done = (state == S_DONE);

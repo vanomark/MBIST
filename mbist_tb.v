@@ -51,7 +51,7 @@ module tb_mbist;
     wire done;
     wire fail;
     wire [ADDR_W-1:0] fail_addr;
-    wire [DATA_W-1:0] fail_addr_mask;
+    wire [DATA_W-1:0] fail_data_mask;
     
     wire mem_ce;
     wire mem_we;
@@ -66,7 +66,7 @@ module tb_mbist;
         .done           (done),
         .fail           (fail),
         .fail_addr      (fail_addr),
-        .fail_addr_mask (fail_addr_mask),
+        .fail_data_mask (fail_data_mask),
         .mem_ce         (mem_ce),
         .mem_we         (mem_we),
         .mem_addr       (mem_addr),
