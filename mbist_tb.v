@@ -1,11 +1,7 @@
 `timescale 1ns / 1ps
 
-`define ADDR_W 10
-`define DATA_W 32
-`define DEPTH  (1 << `ADDR_W)
-
 module memory #(
-    parameter DEPTH = 1024,
+    parameter DEPTH = 1000,
     parameter WIDTH = 32,
     parameter ADDR_W = $clog2(DEPTH)
 )(
@@ -44,38 +40,44 @@ endmodule
 
 
 module tb_mbist;
+    parameter DEPTH = 1000;
+    parameter DATA_W = 32;
+    parameter ADDR_W = $clog2(DEPTH);
+
     reg  clk = 0;
     reg  rst;
     reg  start;
     
     wire done;
     wire fail;
-    wire [`ADDR_W-1:0] fail_addr;
+    wire [ADDR_W-1:0] fail_addr;
+    wire [DATA_W-1:0] fail_addr_mask;
     
     wire mem_ce;
     wire mem_we;
-    wire [`ADDR_W-1:0] mem_addr;
-    wire [`DATA_W-1:0] mem_wdata;
-    wire [`DATA_W-1:0] mem_rdata;
+    wire [ADDR_W-1:0] mem_addr;
+    wire [DATA_W-1:0] mem_wdata;
+    wire [DATA_W-1:0] mem_rdata;
 
     mbist dut (
-        .clk      (clk),
-        .rst      (rst),
-        .start    (start),
-        .done     (done),
-        .fail     (fail),
-        .fail_addr(fail_addr),
-        .mem_ce   (mem_ce),
-        .mem_we   (mem_we),
-        .mem_addr (mem_addr),
-        .mem_wdata(mem_wdata),
-        .mem_rdata(mem_rdata)
+        .clk            (clk),
+        .rst            (rst),
+        .start          (start),
+        .done           (done),
+        .fail           (fail),
+        .fail_addr      (fail_addr),
+        .fail_addr_mask (fail_addr_mask),
+        .mem_ce         (mem_ce),
+        .mem_we         (mem_we),
+        .mem_addr       (mem_addr),
+        .mem_wdata      (mem_wdata),
+        .mem_rdata      (mem_rdata)
     );
 
     memory #(
-        .DEPTH (`DEPTH),
-        .WIDTH (`DATA_W),
-        .ADDR_W(`ADDR_W)
+        .DEPTH (DEPTH),
+        .WIDTH (DATA_W),
+        .ADDR_W(ADDR_W)
     ) mock_mem (
         .clock   (clk),
         .ce      (mem_ce),
