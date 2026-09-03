@@ -7,8 +7,7 @@
 * параметризуемые `DEPTH`, `DATA_W` и `ADDR_W`;
 * интерфейс `CE / WE / ADDR / WDATA / RDATA`;
 * обнаружение **SAF**, **TF** и **RDF**;
-* определение адреса и битовой маски ошибки;
-* сигнал завершения теста `done`.
+* определение адреса и битовой маски ошибки.
 
 ## Алгоритм
 
@@ -65,7 +64,7 @@
 
 ```verilog
 module mbist #(
-    parameter DEPTH  = 1000,
+    parameter DEPTH  = 1024,
     parameter DATA_W = 32,
     parameter ADDR_W = $clog2(DEPTH)
 )
@@ -73,27 +72,11 @@ module mbist #(
 
 | Parameter |         Default | Description            |
 | --------- | --------------: | ---------------------- |
-| `DEPTH`   |          `1000` | Number of memory words |
+| `DEPTH`   |          `1024` | Number of memory words |
 | `DATA_W`  |            `32` | Data width             |
 | `ADDR_W`  | `$clog2(DEPTH)` | Address width          |
 
 ## Error detection
-
-Полученные данные сравниваются с ожидаемыми:
-
-```verilog
-check_mask = mem_rdata ^ expected_data;
-```
-
-Если:
-
-```verilog
-check_mask != 0
-```
-
-обнаружена ошибка.
-
-При этом:
 
 * `fail` — факт ошибки;
 * `fail_addr` — адрес последней ошибки;
